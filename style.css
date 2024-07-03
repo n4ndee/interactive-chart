@@ -1,0 +1,58 @@
+body {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, Helvetica, sans-serif;
+  text-align: center;
+}
+
+.chart {
+  align-items: center;
+  background: lightgray;
+  display: flex;
+  height: 20rem;
+  justify-content: center;
+  max-width: 40rem;
+  width: 100%;
+}
+
+.chart span {
+  color: cornflowerblue;
+  display: block;
+  font-size: 3rem;
+  transform: rotate(-30deg);
+}
+
+.input-container input {
+  font-size: 1.2rem;
+  margin-left: 0.5rem;
+  padding: 10px;
+  width: 3rem;
+}
+
+.slider-container {
+  width: 100%;
+}
+
+.slider-container input {
+  appearance: none;
+  background: lightgray;
+  height: 1rem;
+  margin: 20px 0;
+  max-width: 20rem;
+  width: 100%;
+}
+
+.slider-container input::-webkit-slider-thumb {
+  appearance: none;
+  background: cornflowerblue;
+  height: 2rem;
+  width: 1.2rem;
+}
+
+.income span,
+.deposit span {
+  color: cornflowerblue;
+  font-size: 1.2rem;
+  font-weight: bold;
+}
