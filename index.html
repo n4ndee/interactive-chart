@@ -3,41 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+
+    <title>Interactive Chart</title>
     <link rel="stylesheet" href="style.css" />
+
+    <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="script.js"></script>
   </head>
   <body>
-    <h2>Quantina Investment Chart</h2>
+    <div class="wrapper">
+      <h2>Quantina Investment Chart</h2>
 
-    <div class="chart">
-      <span>Line chart</span>
+      <section>
+        <div class="container chart-container">
+          <canvas id="chart"></canvas>
+        </div>
+
+        <div class="container inputs-container">
+          <p class="income">
+            Monthly income: <span class="income__value">0</span> GBP
+          </p>
+
+          <div>
+            <label for="return-input">Return:</label>
+            <input
+              type="number"
+              min="0"
+              max="100"
+              value="5"
+              id="return-input"
+            />
+            <span>%</span>
+          </div>
+
+          <input
+            type="range"
+            min="1000"
+            max="100000"
+            step="1000"
+            value="5000"
+            class="slider"
+            id="deposit-range"
+          />
+
+          <p class="deposit">
+            Initial deposit: <span class="deposit__value">0</span> GBP
+          </p>
+
+          <p>Profit protection: 70%</p>
+        </div>
+      </section>
     </div>
-
-    <p class="income">
-      Monthly income: <span class="income__value">0</span> GBP
-    </p>
-
-    <div class="input-container">
-      <label for="return">Return:</label>
-      <input type="number" min="0" max="100" value="5" id="return" />
-      <span>%</span>
-    </div>
-
-    <div class="slider-container">
-      <input
-        type="range"
-        min="1000"
-        max="100000"
-        step="1000"
-        value="5000"
-        class="slider"
-        id="deposit-range"
-      />
-    </div>
-
-    <p class="deposit">
-      Initial deposit: <span class="deposit__value">0</span> GBP
-    </p>
   </body>
 </html>
