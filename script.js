@@ -78,6 +78,7 @@ const config = {
   data: data,
   options: {
     responsive: true,
+    maintainAspectRatio: false,
     plugins: {
       legend: {
         position: "bottom",
@@ -85,6 +86,11 @@ const config = {
       title: {
         display: true,
         text: "Based on last year's performance of an avg. 5% / month",
+      },
+      tooltip: {
+        backgroundColor: "gray",
+        padding: 12,
+        titleFont: { size: "16" },
       },
     },
   },

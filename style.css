@@ -19,6 +19,7 @@ section {
 }
 
 .chart-container {
+  height: 60vh;
   width: 50vw;
 }
 
@@ -41,7 +42,7 @@ section {
 
 #deposit-range {
   appearance: none;
-  background: gray;
+  background: lightgray;
   height: 1rem;
   margin: 20px 0;
   width: 100%;
@@ -68,5 +69,9 @@ section {
 
   .container {
     width: 100%;
+  }
+
+  .chart-container {
+    height: 40vh;
   }
 }
