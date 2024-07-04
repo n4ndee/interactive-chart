@@ -1,26 +1,39 @@
 "use strict";
 
+///////////////////////////////////////
+// Inputs
+
 const incomeValue = document.querySelector(".income__value");
-const returnValue = document.querySelector("#return-input");
+const returnValue = document.getElementById("return-input");
 const slider = document.querySelector(".slider");
 const depositValue = document.querySelector(".deposit__value");
 
-let returnPercent = returnValue.value / 100;
-incomeValue.innerHTML = slider.value * returnPercent;
-depositValue.innerHTML = slider.value;
+let returnPercent;
 
-slider.addEventListener("input", function () {
-  depositValue.innerHTML = this.value;
-  incomeValue.innerHTML = Math.trunc(slider.value * returnPercent);
-
-  returnValue.blur();
-});
-
-returnValue.addEventListener("input", function () {
+const updateValues = function () {
   returnPercent = returnValue.value / 100;
+
   depositValue.innerHTML = slider.value;
   incomeValue.innerHTML = Math.trunc(slider.value * returnPercent);
-});
+};
+updateValues();
+
+///////////////////////////////////////
+// Logic
+
+const years = 10;
+
+let data1 = [+slider.value];
+let data2 = [+incomeValue.innerHTML];
+
+const updateDataset = function (arr, percentage, years) {
+  for (let i = 0; i < years; i++) {
+    arr.push(Math.trunc(arr[i] + arr[i] * percentage));
+  }
+};
+
+updateDataset(data1, returnPercent, years);
+updateDataset(data2, returnPercent, years);
 
 ///////////////////////////////////////
 // Chart setup
@@ -49,20 +62,17 @@ const colors = {
   },
 };
 
-const data1 = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
-const data2 = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50];
-
 const data = {
   labels: labels,
   datasets: [
     {
-      label: "Dataset 1",
+      label: "Balance",
       data: data1,
       borderColor: colors.color1.border,
       backgroundColor: colors.color1.background,
     },
     {
-      label: "Dataset 2",
+      label: "Income",
       data: data2,
       borderColor: colors.color2.border,
       backgroundColor: colors.color2.background,
@@ -79,6 +89,13 @@ const config = {
   options: {
     responsive: true,
     maintainAspectRatio: false,
+    pointRadius: 5,
+    pointHoverRadius: 10,
+    pointHitRadius: 50,
+    interaction: {
+      intersect: false,
+      mode: "index",
+    },
     plugins: {
       legend: {
         position: "bottom",
@@ -91,6 +108,8 @@ const config = {
         backgroundColor: "gray",
         padding: 12,
         titleFont: { size: "16" },
+        position: "average",
+        caretSize: 0,
       },
     },
   },
@@ -100,4 +119,29 @@ const config = {
 // Chart display
 
 const chartEl = document.getElementById("chart");
-new Chart(chartEl, config);
+const chart = new Chart(chartEl, config);
+
+const updateChart = function () {
+  updateDataset(data1, returnPercent, years);
+  updateDataset(data2, returnPercent, years);
+
+  chart.data.datasets[0].data = data1;
+  chart.data.datasets[1].data = data2;
+  chart.update();
+};
+
+slider.addEventListener("input", function () {
+  updateValues();
+  returnValue.blur();
+});
+
+slider.addEventListener("change", function () {
+  data1 = [+slider.value];
+  data2 = [+incomeValue.innerHTML];
+  updateChart();
+});
+
+returnValue.addEventListener("input", function () {
+  updateValues();
+  updateChart();
+});
