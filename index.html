@@ -19,39 +19,48 @@
           <canvas id="chart"></canvas>
         </div>
 
-        <div class="container inputs-container">
-          <p class="income">
-            Monthly income: <span class="income__value">0</span> GBP
-          </p>
+        <form class="container inputs-container">
+          <h3 class="form__title">Profit calculator</h3>
 
-          <div>
-            <label for="return-input">Return:</label>
-            <input
-              type="number"
-              min="0"
-              max="100"
-              value="5"
-              id="return-input"
-            />
-            <span>%</span>
+          <div class="form-row form__income">
+            <div>Monthly income:</div>
+            <div><span class="form__income--value">0</span> GBP</div>
           </div>
 
-          <input
-            type="range"
-            min="1000"
-            max="100000"
-            step="1000"
-            value="5000"
-            class="slider"
-            id="deposit-range"
-          />
+          <div class="form-row">
+            <label for="return-input">Avg. monthly return:</label>
+            <div>
+              <input
+                type="number"
+                min="0"
+                max="100"
+                step="1"
+                value="5"
+                class="form__input--return"
+                id="return-input"
+              />
+              %
+            </div>
+          </div>
 
-          <p class="deposit">
-            Initial deposit: <span class="deposit__value">0</span> GBP
-          </p>
+          <div>
+            <p class="form__deposit">
+              Initial deposit: <span class="form__deposit--value">0</span> GBP
+            </p>
+
+            <input
+              type="range"
+              min="1000"
+              max="100000"
+              step="1000"
+              value="25000"
+              class="form__input--deposit"
+              id="deposit-range"
+            />
+          </div>
 
           <p>Profit protection: 70%</p>
-        </div>
+        </form>
       </section>
     </div>
   </body>

@@ -3,32 +3,33 @@
 ///////////////////////////////////////
 // Inputs
 
-const incomeValue = document.querySelector(".income__value");
-const returnValue = document.getElementById("return-input");
-const slider = document.querySelector(".slider");
-const depositValue = document.querySelector(".deposit__value");
+const incomeValue = document.querySelector(".form__income--value");
+const depositValue = document.querySelector(".form__deposit--value");
+const inputReturn = document.querySelector(".form__input--return");
+const inputDeposit = document.querySelector(".form__input--deposit");
 
 let returnPercent;
 
-const updateValues = function () {
-  returnPercent = returnValue.value / 100;
+const calcIncome = function () {
+  returnPercent = inputReturn.value / 100;
 
-  depositValue.innerHTML = slider.value;
-  incomeValue.innerHTML = Math.trunc(slider.value * returnPercent);
+  depositValue.textContent = inputDeposit.value;
+  incomeValue.textContent = Math.trunc(inputDeposit.value * returnPercent);
 };
-updateValues();
+calcIncome();
 
 ///////////////////////////////////////
 // Logic
 
 const years = 10;
+const MONTHS = 12;
 
-let data1 = [+slider.value];
-let data2 = [+incomeValue.innerHTML];
+let data1 = [+inputDeposit.value];
+let data2 = [+incomeValue.textContent];
 
 const updateDataset = function (arr, percentage, years) {
   for (let i = 0; i < years; i++) {
-    arr.push(Math.trunc(arr[i] + arr[i] * percentage));
+    arr.push(Math.trunc(arr[i] + arr[i] * percentage * MONTHS));
   }
 };
 
@@ -39,6 +40,7 @@ updateDataset(data2, returnPercent, years);
 // Chart setup
 
 const labels = [
+  "Beginning",
   "1 Year",
   "2 Years",
   "3 Years",
@@ -52,14 +54,8 @@ const labels = [
 ];
 
 const colors = {
-  color1: {
-    border: "cornflowerblue",
-    background: "lightskyblue",
-  },
-  color2: {
-    border: "mediumspringgreen",
-    background: "palegreen",
-  },
+  color1: "cornflowerblue",
+  color2: "mediumspringgreen",
 };
 
 const data = {
@@ -68,14 +64,14 @@ const data = {
     {
       label: "Balance",
       data: data1,
-      borderColor: colors.color1.border,
-      backgroundColor: colors.color1.background,
+      borderColor: colors.color1,
+      backgroundColor: colors.color1,
     },
     {
-      label: "Income",
+      label: "Profit",
       data: data2,
-      borderColor: colors.color2.border,
-      backgroundColor: colors.color2.background,
+      borderColor: colors.color2,
+      backgroundColor: colors.color2,
     },
   ],
 };
@@ -91,7 +87,6 @@ const config = {
     maintainAspectRatio: false,
     pointRadius: 5,
     pointHoverRadius: 10,
-    pointHitRadius: 50,
     interaction: {
       intersect: false,
       mode: "index",
@@ -102,13 +97,16 @@ const config = {
       },
       title: {
         display: true,
-        text: "Based on last year's performance of an avg. 5% / month",
+        text: `Based on previous years' avg. performance of ${
+          inputReturn.value
+        }% / month (${inputReturn.value * 12}% / yr)`,
       },
       tooltip: {
         backgroundColor: "gray",
         padding: 12,
         titleFont: { size: "16" },
         position: "average",
+        yAlign: "bottom",
         caretSize: 0,
       },
     },
@@ -122,26 +120,28 @@ const chartEl = document.getElementById("chart");
 const chart = new Chart(chartEl, config);
 
 const updateChart = function () {
+  data1.length = 1;
+  data2.length = 1;
+
+  data1[0] = +inputDeposit.value;
+  data2[0] = +incomeValue.textContent;
+
   updateDataset(data1, returnPercent, years);
   updateDataset(data2, returnPercent, years);
 
-  chart.data.datasets[0].data = data1;
-  chart.data.datasets[1].data = data2;
   chart.update();
 };
 
-slider.addEventListener("input", function () {
-  updateValues();
-  returnValue.blur();
+inputDeposit.addEventListener("input", function () {
+  calcIncome();
+  inputReturn.blur();
 });
 
-slider.addEventListener("change", function () {
-  data1 = [+slider.value];
-  data2 = [+incomeValue.innerHTML];
+inputDeposit.addEventListener("change", function () {
   updateChart();
 });
 
-returnValue.addEventListener("input", function () {
-  updateValues();
+inputReturn.addEventListener("input", function () {
+  calcIncome();
   updateChart();
 });

@@ -24,42 +24,62 @@ section {
 }
 
 .inputs-container {
-  align-items: center;
   background: whitesmoke;
   display: flex;
   flex-direction: column;
+  gap: 1rem;
   justify-content: start;
   padding: 1.2rem;
-  width: 20vw;
+  width: 22vw;
 }
 
-#return-input {
+.inputs-container .form__title {
+  text-align: center;
+}
+
+.inputs-container span {
+  color: cornflowerblue;
+  font-weight: bold;
+}
+
+.form-row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.form__income {
+  border-bottom: 1px solid;
+  padding-bottom: 1rem;
+}
+
+.form__income--value {
+  font-size: 1.6rem;
+}
+
+.form__input--return {
   font-size: 1.2rem;
   margin-left: 0.5rem;
-  padding: 10px;
-  width: 4rem;
+  padding: 0.8rem;
+  width: 5rem;
 }
 
-#deposit-range {
+.form__deposit--value {
+  font-size: 1.2rem;
+}
+
+.form__input--deposit {
   appearance: none;
   background: lightgray;
   height: 1rem;
-  margin: 20px 0;
   width: 100%;
 }
 
-#deposit-range::-webkit-slider-thumb {
+.form__input--deposit::-webkit-slider-thumb {
   appearance: none;
   background: cornflowerblue;
   height: 2rem;
   width: 1.2rem;
-}
-
-.income span,
-.deposit span {
-  color: cornflowerblue;
-  font-size: 1.2rem;
-  font-weight: bold;
 }
 
 @media (max-width: 800px) {
