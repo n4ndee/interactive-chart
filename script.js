@@ -8,6 +8,17 @@ const checkboxInflation = document.querySelector(
   ".form__inflation .form-input"
 );
 
+const rootStyle = getComputedStyle(document.documentElement);
+
+const colors = {
+  primary: rootStyle.getPropertyValue("--primary"),
+  secondary: rootStyle.getPropertyValue("--secondary"),
+  font: rootStyle.getPropertyValue("--font"),
+  gray: rootStyle.getPropertyValue("--gray"),
+  grayMedium: rootStyle.getPropertyValue("--gray-medium"),
+  grayDark: rootStyle.getPropertyValue("--gray-dark"),
+};
+
 // Calculate income
 
 let returnPercent;
@@ -73,17 +84,6 @@ const labels = [
   "10 Years",
 ];
 
-const root = document.documentElement;
-
-const colors = {
-  primary: getComputedStyle(root).getPropertyValue("--primary"),
-  secondary: getComputedStyle(root).getPropertyValue("--secondary"),
-  font: getComputedStyle(root).getPropertyValue("--font"),
-  gray: getComputedStyle(root).getPropertyValue("--gray"),
-  grayMedium: getComputedStyle(root).getPropertyValue("--gray-medium"),
-  grayDark: getComputedStyle(root).getPropertyValue("--gray-dark"),
-};
-
 const data = {
   labels: labels,
   datasets: [
@@ -138,7 +138,9 @@ const config = {
         cornerRadius: 0,
         padding: 12,
         titleFont: { size: 18 },
+        titleMarginBottom: 10,
         bodyFont: { size: 14 },
+        bodySpacing: 6,
         boxPadding: 6,
         multiKeyBackground: "none",
       },
