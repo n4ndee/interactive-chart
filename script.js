@@ -1,12 +1,12 @@
 "use strict";
 
+const chartEl = document.querySelector("#chart");
+const formEl = document.querySelector("form");
 const incomeValue = document.querySelector(".form__income .form-value");
 const depositValue = document.querySelector(".form__deposit .form-value");
 const inputReturn = document.querySelector(".form__return .form-input");
 const inputDeposit = document.querySelector(".form__deposit .form-input");
-const checkboxInflation = document.querySelector(
-  ".form__inflation .form-input"
-);
+const checkInflation = document.querySelector(".form__inflation .form-input");
 
 const rootStyle = getComputedStyle(document.documentElement);
 
@@ -18,6 +18,9 @@ const colors = {
   grayMedium: rootStyle.getPropertyValue("--gray-medium"),
   grayDark: rootStyle.getPropertyValue("--gray-dark"),
 };
+
+///////////////////////////////////////
+// Functions
 
 // Calculate income
 
@@ -31,7 +34,6 @@ const calcIncome = function () {
   depositValue.textContent = inputDeposit.value;
   incomeValue.textContent = Math.trunc(inputDeposit.value * returnPercent);
 };
-calcIncome();
 
 // Update dataset
 
@@ -39,36 +41,37 @@ const years = 10;
 const MONTHS = 12;
 let inflation = 1;
 
-let data1 = [+inputDeposit.value];
-let data2 = [+incomeValue.textContent];
-
-const updateDataset = function (arr, percentage, years) {
+const updateDataset = function (arr) {
   for (let i = 0; i < years; i++) {
-    arr.push(Math.trunc(arr[i] + arr[i] * percentage * MONTHS * inflation));
+    arr.push(Math.trunc(arr[i] + arr[i] * returnPercent * MONTHS * inflation));
   }
 };
-updateDataset(data1, returnPercent, years);
-updateDataset(data2, returnPercent, years);
 
-// Update chart
+// Update chart(s)
 
-const updateChart = function () {
-  if (!inputReturn.checkValidity()) return;
+const updateChart = function (dataset, starterVal) {
+  dataset.length = 1;
+  dataset[0] = +starterVal;
 
-  data1.length = 1;
-  data2.length = 1;
+  updateDataset(dataset, returnPercent, years);
+};
 
-  data1[0] = +inputDeposit.value;
-  data2[0] = +incomeValue.textContent;
+const updateCharts = function () {
+  if (!inputReturn.checkValidity()) {
+    formEl.reportValidity();
+    inputDeposit.setAttribute("disabled", true);
 
-  updateDataset(data1, returnPercent, years);
-  updateDataset(data2, returnPercent, years);
+    return;
+  } else inputDeposit.removeAttribute("disabled");
+
+  updateChart(balance, depositValue.textContent);
+  updateChart(profit, incomeValue.textContent);
 
   chart.update();
 };
 
 ///////////////////////////////////////
-// Chart setup
+// Chart data
 
 const labels = [
   "Start",
@@ -84,18 +87,21 @@ const labels = [
   "10 Years",
 ];
 
+let balance = [];
+let profit = [];
+
 const data = {
   labels: labels,
   datasets: [
     {
       label: "Balance",
-      data: data1,
+      data: balance,
       borderColor: colors.primary,
       backgroundColor: colors.primary,
     },
     {
       label: "Profit",
-      data: data2,
+      data: profit,
       borderColor: colors.secondary,
       backgroundColor: colors.secondary,
     },
@@ -104,6 +110,10 @@ const data = {
 
 ///////////////////////////////////////
 // Chart config
+
+const chartTitle = `Based on previous years' avg. performance of ${
+  inputReturn.value
+}% / month (${Math.trunc(inputReturn.value * 12)}% / yr)`;
 
 const config = {
   type: "line",
@@ -122,9 +132,7 @@ const config = {
       },
       title: {
         display: true,
-        text: `Based on previous years' avg. performance of ${
-          inputReturn.value
-        }% / month (${Math.trunc(inputReturn.value * 12)}% / yr)`,
+        text: chartTitle,
       },
       tooltip: {
         position: "average",
@@ -149,26 +157,35 @@ const config = {
 };
 
 ///////////////////////////////////////
-// Chart display
+// Init
 
-const chartEl = document.getElementById("chart");
 const chart = new Chart(chartEl, config);
+
+calcIncome();
+
+updateDataset(balance);
+updateDataset(profit);
+
+updateCharts();
+
+///////////////////////////////////////
+// Chart events
+
+checkInflation.addEventListener("change", function () {
+  inflation = this.checked ? 0.97 : 1;
+  updateCharts();
+});
 
 inputDeposit.addEventListener("input", function () {
   calcIncome();
   inputReturn.blur();
 });
 
-checkboxInflation.addEventListener("change", function () {
-  inflation = this.checked ? 0.97 : 1;
-  updateChart();
-});
-
 inputDeposit.addEventListener("change", function () {
-  updateChart();
+  updateCharts();
 });
 
 inputReturn.addEventListener("input", function () {
   calcIncome();
-  updateChart();
+  updateCharts();
 });

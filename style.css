@@ -7,6 +7,8 @@
   --gray-dark: hsl(from var(--gray) h s calc(l - 30));
   --red: #b20000;
   --red-light: hsl(from var(--red) h s calc(l + 60));
+
+  --trans: 0.3s ease;
 }
 
 html {
@@ -22,15 +24,34 @@ h2 {
   text-align: center;
 }
 
-label,
+label {
+  margin: 0;
+}
+
 input {
   margin: 0;
+  transition: filter var(--trans), opacity var(--trans);
+}
+
+input[type="range"] {
+  cursor: pointer;
 }
 
 input:invalid,
 input:invalid:focus {
   background: var(--red-light);
   border: 1px solid var(--red);
+  cursor: help;
+}
+
+.input-wrapper:has(:invalid)::after {
+  display: none;
+}
+
+input:disabled {
+  cursor: not-allowed;
+  filter: grayscale(1);
+  opacity: 0.5;
 }
 
 section {
@@ -42,12 +63,12 @@ section {
 
 .container {
   margin: 0;
+  padding: 1.2rem;
 }
 
 .chart-container {
   border: 1px solid;
   height: 60vh;
-  padding: 1.2rem;
   width: 50vw;
 }
 
@@ -57,7 +78,6 @@ section {
   flex-direction: column;
   gap: 2rem;
   justify-content: center;
-  padding: 1.2rem;
   width: 22vw;
 }
 
@@ -134,7 +154,6 @@ section {
 .form__deposit .form-input {
   appearance: none;
   background: var(--gray-medium);
-  cursor: pointer;
   grid-column: span 2;
   height: 0.6rem;
   margin: 1rem 0 0.8rem;
@@ -151,10 +170,11 @@ section {
 .form__deposit .form-input::-moz-range-thumb {
   appearance: none;
   background: var(--primary);
-  border: 0;
   border-radius: 1rem;
   height: 2rem;
   width: 0.8rem;
+
+  border: 0;
 }
 
 .form__deposit .slider-label {
