@@ -57,12 +57,16 @@ const updateChart = function (dataset, starterVal) {
 };
 
 const updateCharts = function () {
-  if (!inputReturn.checkValidity()) {
+  if (!formEl.checkValidity()) {
     formEl.reportValidity();
+    checkInflation.setAttribute("disabled", true);
     inputDeposit.setAttribute("disabled", true);
 
     return;
-  } else inputDeposit.removeAttribute("disabled");
+  } else {
+    checkInflation.removeAttribute("disabled");
+    inputDeposit.removeAttribute("disabled");
+  }
 
   updateChart(balance, depositValue.textContent);
   updateChart(profit, incomeValue.textContent);
@@ -138,19 +142,27 @@ const config = {
         position: "average",
         yAlign: "bottom",
         caretSize: 0,
-        backgroundColor: colors.gray,
-        titleColor: colors.font,
-        bodyColor: colors.font,
-        borderColor: colors.grayDark,
         borderWidth: 1,
+        borderColor: colors.grayDark,
         cornerRadius: 0,
+        backgroundColor: colors.gray,
         padding: 12,
         titleFont: { size: 18 },
+        titleColor: colors.font,
         titleMarginBottom: 10,
         bodyFont: { size: 14 },
+        bodyColor: colors.font,
         bodySpacing: 6,
-        boxPadding: 6,
-        multiKeyBackground: "none",
+        boxPadding: 2,
+        // Workaround because can't hide multiKeyBackground
+        usePointStyle: true,
+        callbacks: {
+          labelPointStyle: () => {
+            return {
+              pointStyle: "rect",
+            };
+          },
+        },
       },
     },
   },
@@ -171,6 +183,11 @@ updateCharts();
 ///////////////////////////////////////
 // Chart events
 
+inputReturn.addEventListener("input", function () {
+  calcIncome();
+  updateCharts();
+});
+
 checkInflation.addEventListener("change", function () {
   inflation = this.checked ? 0.97 : 1;
   updateCharts();
@@ -178,14 +195,11 @@ checkInflation.addEventListener("change", function () {
 
 inputDeposit.addEventListener("input", function () {
   calcIncome();
+
+  // Remove focus on mobile
   inputReturn.blur();
 });
 
 inputDeposit.addEventListener("change", function () {
-  updateCharts();
-});
-
-inputReturn.addEventListener("input", function () {
-  calcIncome();
   updateCharts();
 });
