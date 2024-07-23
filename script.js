@@ -216,21 +216,16 @@ inputReturn.addEventListener("input", function () {
   updateCharts();
 });
 
-inputProtect.addEventListener("input", function () {
-  updateCharts();
-});
+inputProtect.addEventListener("input", updateCharts);
 
-checkInflation.addEventListener("change", function () {
-  updateCharts();
-});
+checkInflation.addEventListener("change", updateCharts);
+
+inputDeposit.addEventListener("change", updateCharts);
 
 inputDeposit.addEventListener("input", function () {
   calcIncome();
+  navigator.vibrate(20);
 
   // Remove focus on mobile
   inputReturn.blur();
-});
-
-inputDeposit.addEventListener("change", function () {
-  updateCharts();
 });
