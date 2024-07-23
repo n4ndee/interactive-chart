@@ -224,7 +224,7 @@ inputDeposit.addEventListener("change", updateCharts);
 
 inputDeposit.addEventListener("input", function () {
   calcIncome();
-  navigator.vibrate(20);
+  // navigator.vibrate(20);
 
   // Remove focus on mobile
   inputReturn.blur();
