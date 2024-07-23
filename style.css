@@ -118,7 +118,7 @@ section {
 }
 
 .form__return > div:nth-of-type(2) .input-wrapper::after {
-  left: 5ch;
+  left: 5.2ch;
 }
 
 .form__return .form-input {

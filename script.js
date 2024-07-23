@@ -2,9 +2,11 @@
 
 const chartEl = document.querySelector("#chart");
 const formEl = document.querySelector("form");
+const allInputs = document.querySelectorAll(".form-container input");
 const incomeValue = document.querySelector(".form__income .form-value");
 const depositValue = document.querySelector(".form__deposit .form-value");
-const inputReturn = document.querySelector(".form__return .form-input");
+const inputReturn = document.querySelector(".form__return #return-input");
+const inputProtect = document.querySelector(".form__return #protect-input");
 const inputDeposit = document.querySelector(".form__deposit .form-input");
 const checkInflation = document.querySelector(".form__inflation .form-input");
 
@@ -22,28 +24,63 @@ const colors = {
 ///////////////////////////////////////
 // Functions
 
+// Validate inputs
+
+const validateInputs = function () {
+  const inputsNotInFocus = Array.from(allInputs).filter(
+    (el) => document.activeElement !== el
+  );
+
+  if (!formEl.checkValidity()) {
+    formEl.reportValidity();
+
+    inputsNotInFocus.forEach((el) => {
+      el.setAttribute("disabled", true);
+    });
+
+    return false;
+  } else {
+    inputsNotInFocus.forEach((el) => {
+      el.removeAttribute("disabled");
+    });
+  }
+};
+
 // Calculate income
 
 let returnPercent;
 
 const calcIncome = function () {
-  if (!inputReturn.checkValidity()) return;
+  if (validateInputs() === false) return;
 
-  returnPercent = inputReturn.value / 100;
+  returnPercent = inputReturn.value;
 
   depositValue.textContent = inputDeposit.value;
-  incomeValue.textContent = Math.trunc(inputDeposit.value * returnPercent);
+  incomeValue.textContent = Math.trunc(
+    inputDeposit.value * (returnPercent / 100)
+  );
 };
 
 // Update dataset
 
 const years = 10;
 const MONTHS = 12;
-let inflation = 1;
 
 const updateDataset = function (arr) {
+  let protectPercent = inputProtect.value;
+  let inflation = checkInflation.checked ? 0.97 : 1;
+
   for (let i = 0; i < years; i++) {
-    arr.push(Math.trunc(arr[i] + arr[i] * returnPercent * MONTHS * inflation));
+    arr.push(
+      Math.trunc(
+        arr[i] +
+          arr[i] *
+            (returnPercent / 100) *
+            (protectPercent / 100) *
+            MONTHS *
+            inflation
+      )
+    );
   }
 };
 
@@ -53,20 +90,11 @@ const updateChart = function (dataset, starterVal) {
   dataset.length = 1;
   dataset[0] = +starterVal;
 
-  updateDataset(dataset, returnPercent, years);
+  updateDataset(dataset);
 };
 
 const updateCharts = function () {
-  if (!formEl.checkValidity()) {
-    formEl.reportValidity();
-    checkInflation.setAttribute("disabled", true);
-    inputDeposit.setAttribute("disabled", true);
-
-    return;
-  } else {
-    checkInflation.removeAttribute("disabled");
-    inputDeposit.removeAttribute("disabled");
-  }
+  if (validateInputs() === false) return;
 
   updateChart(balance, depositValue.textContent);
   updateChart(profit, incomeValue.textContent);
@@ -188,8 +216,11 @@ inputReturn.addEventListener("input", function () {
   updateCharts();
 });
 
+inputProtect.addEventListener("input", function () {
+  updateCharts();
+});
+
 checkInflation.addEventListener("change", function () {
-  inflation = this.checked ? 0.97 : 1;
   updateCharts();
 });
 
