@@ -99,39 +99,51 @@ section {
   margin: 0 0.4rem;
 }
 
-.form__return {
+.form__fields {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr 1fr;
 }
 
-.form__return .input-wrapper {
+.form__fields .input-wrapper {
   align-items: center;
   display: flex;
   position: relative;
 }
 
-.form__return .input-wrapper::after {
+.form__fields .form-input {
+  font-size: 1.2rem;
+  padding: 0.8rem;
+}
+
+.form__fields .percent-sign::after {
   content: "%";
   left: 7ch;
   position: absolute;
 }
 
-.form__return > div:nth-of-type(2) .input-wrapper::after {
+.form__fields > div:has(#protect-input) .input-wrapper::after {
   left: 5.2ch;
 }
 
-.form__return .form-input {
-  font-size: 1.2rem;
-  padding: 0.8rem;
+.form__fields > div:has(#inflation-check) {
+  display: grid;
+  grid-template-rows: 1fr 2fr;
 }
 
-.form__inflation {
+.form__fields > div:has(#inflation-check) > div {
+  align-items: center;
   display: flex;
 }
 
-.form__inflation .form-input {
+.form__fields > div:has(#inflation-check) .form-input {
+  height: 1.2rem;
   width: 1.2rem;
+}
+
+.form__fields > div:has(#inflation-check) > div label {
+  color: inherit;
+  font-weight: inherit;
 }
 
 .form__deposit {

@@ -2,13 +2,14 @@
 
 const chartEl = document.querySelector("#chart");
 const formEl = document.querySelector("form");
-const allInputs = document.querySelectorAll(".form-container input");
-const incomeValue = document.querySelector(".form__income .form-value");
-const depositValue = document.querySelector(".form__deposit .form-value");
-const inputReturn = document.querySelector(".form__return #return-input");
-const inputProtect = document.querySelector(".form__return #protect-input");
+const formInputs = document.querySelectorAll(".form-container input");
+const incomeDisplay = document.querySelector(".form__income .form-value");
+const depositDisplay = document.querySelector(".form__deposit .form-value");
+const inputReturn = document.querySelector(".form__fields #return-input");
+const inputYears = document.querySelector(".form__fields #years-input");
+const inputProtect = document.querySelector(".form__fields #protect-input");
+const checkInflation = document.querySelector(".form__fields #inflation-check");
 const inputDeposit = document.querySelector(".form__deposit .form-input");
-const checkInflation = document.querySelector(".form__inflation .form-input");
 
 const rootStyle = getComputedStyle(document.documentElement);
 
@@ -27,7 +28,7 @@ const colors = {
 // Validate inputs
 
 const validateInputs = function () {
-  const inputsNotInFocus = Array.from(allInputs).filter(
+  const inputsNotInFocus = Array.from(formInputs).filter(
     (el) => document.activeElement !== el
   );
 
@@ -48,26 +49,30 @@ const validateInputs = function () {
 
 // Calculate income
 
-let returnPercent;
+let returnPercent, depositValue, incomeValue;
 
 const calcIncome = function () {
   if (validateInputs() === false) return;
 
   returnPercent = inputReturn.value;
 
-  depositValue.textContent = inputDeposit.value;
-  incomeValue.textContent = Math.trunc(
-    inputDeposit.value * (returnPercent / 100)
-  );
+  depositValue = inputDeposit.value;
+  incomeValue = depositValue * (returnPercent / 100);
+
+  depositDisplay.textContent = Number(depositValue).toLocaleString("en-GB");
+  incomeDisplay.textContent = Number(incomeValue).toLocaleString("en-GB", {
+    minimumFractionDigits: 2,
+  });
 };
 
-// Update dataset
+// Create dataset
 
-const years = 10;
-const MONTHS = 12;
+let years;
 
-const updateDataset = function (arr) {
-  let protectPercent = inputProtect.value;
+const createDataset = function (arr) {
+  years = inputYears.value;
+  const MONTHS = 12;
+  const protectPercent = inputProtect.value;
   let inflation = checkInflation.checked ? 0.97 : 1;
 
   for (let i = 0; i < years; i++) {
@@ -84,40 +89,50 @@ const updateDataset = function (arr) {
   }
 };
 
-// Update chart(s)
+// Create labels
 
-const updateChart = function (dataset, starterVal) {
-  dataset.length = 1;
-  dataset[0] = +starterVal;
+let labels = [];
 
-  updateDataset(dataset);
+const createLabels = function (arr) {
+  for (let i = 0; i < years - 1; i++) {
+    arr.push(`${i + 2} Years`);
+  }
 };
 
-const updateCharts = function () {
+// Update dataset
+
+const updateDataset = function (arr, starterValue) {
+  arr.length = 1;
+  arr[0] = +starterValue;
+
+  createDataset(arr);
+};
+
+// Update labels
+
+const updateLabels = function (arr) {
+  arr.length = 2;
+  arr[0] = "Start";
+  arr[1] = "1 Year";
+
+  createLabels(arr);
+};
+
+// Update chart
+
+const updateChart = function () {
   if (validateInputs() === false) return;
 
-  updateChart(balance, depositValue.textContent);
-  updateChart(profit, incomeValue.textContent);
+  updateDataset(balance, depositValue);
+  updateDataset(profit, incomeValue);
+
+  updateLabels(labels);
 
   chart.update();
 };
 
 ///////////////////////////////////////
 // Chart data
-
-const labels = [
-  "Start",
-  "1 Year",
-  "2 Years",
-  "3 Years",
-  "4 Years",
-  "5 Years",
-  "6 Years",
-  "7 Years",
-  "8 Years",
-  "9 Years",
-  "10 Years",
-];
 
 let balance = [];
 let profit = [];
@@ -158,6 +173,13 @@ const config = {
       intersect: false,
       mode: "index",
     },
+    scales: {
+      x: {
+        ticks: {
+          maxRotation: 30,
+        },
+      },
+    },
     plugins: {
       legend: {
         position: "bottom",
@@ -190,6 +212,21 @@ const config = {
               pointStyle: "rect",
             };
           },
+
+          label: function (context) {
+            let label = context.dataset.label || "";
+
+            if (label) {
+              label += ": ";
+            }
+            if (context.parsed.y !== null) {
+              label += new Intl.NumberFormat("en-GB", {
+                style: "currency",
+                currency: "GBP",
+              }).format(context.parsed.y);
+            }
+            return label;
+          },
         },
       },
     },
@@ -203,29 +240,30 @@ const chart = new Chart(chartEl, config);
 
 calcIncome();
 
-updateDataset(balance);
-updateDataset(profit);
+createDataset(balance);
+createDataset(profit);
 
-updateCharts();
+updateChart();
 
 ///////////////////////////////////////
-// Chart events
+// Form events
 
 inputReturn.addEventListener("input", function () {
   calcIncome();
-  updateCharts();
+  updateChart();
 });
 
-inputProtect.addEventListener("input", updateCharts);
+inputYears.addEventListener("input", updateChart);
 
-checkInflation.addEventListener("change", updateCharts);
+inputProtect.addEventListener("input", updateChart);
 
-inputDeposit.addEventListener("change", updateCharts);
+checkInflation.addEventListener("change", updateChart);
+
+inputDeposit.addEventListener("change", updateChart);
 
 inputDeposit.addEventListener("input", function () {
   calcIncome();
-  // navigator.vibrate(20);
 
-  // Remove focus on mobile
-  inputReturn.blur();
+  // Doesn't work on iOS
+  // navigator.vibrate(20);
 });

@@ -30,10 +30,10 @@
             <span>GBP</span>
           </div>
 
-          <div class="form-row form__return">
+          <div class="form-row form__fields">
             <div>
               <label for="return-input">Monthly return</label>
-              <div class="input-wrapper">
+              <div class="input-wrapper percent-sign">
                 <input
                   type="number"
                   min="0.01"
@@ -48,8 +48,24 @@
             </div>
 
             <div>
-              <label for="protect-input">Profit protection</label>
+              <label for="years-input">Years of growth</label>
               <div class="input-wrapper">
+                <input
+                  type="number"
+                  min="1"
+                  max="50"
+                  step="1"
+                  value="10"
+                  class="form-input"
+                  id="years-input"
+                  required
+                />
+              </div>
+            </div>
+
+            <div>
+              <label for="protect-input">Profit protection</label>
+              <div class="input-wrapper percent-sign">
                 <input
                   type="number"
                   min="1"
@@ -62,11 +78,18 @@
                 />
               </div>
             </div>
-          </div>
 
-          <div class="form-row form__inflation">
-            <input type="checkbox" class="form-input" id="inflation-checkbox" />
-            <label for="inflation-checkbox">Deduct inflation (3% / yr)</label>
+            <div>
+              <label>Deduct inflation</label>
+              <div>
+                <input
+                  type="checkbox"
+                  class="form-input"
+                  id="inflation-check"
+                />
+                <label for="inflation-check">3% / year</label>
+              </div>
+            </div>
           </div>
 
           <div class="form-row form__deposit">
