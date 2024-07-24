@@ -55,7 +55,6 @@ const calcIncome = function () {
   if (validateInputs() === false) return;
 
   returnPercent = inputReturn.value;
-
   depositValue = inputDeposit.value;
   incomeValue = depositValue * (returnPercent / 100);
 
@@ -165,6 +164,7 @@ const chartTitle = `Based on previous years' avg. performance of ${
 const config = {
   type: "line",
   data: data,
+
   options: {
     responsive: true,
     maintainAspectRatio: false,
@@ -173,6 +173,7 @@ const config = {
       intersect: false,
       mode: "index",
     },
+
     scales: {
       x: {
         ticks: {
@@ -180,14 +181,17 @@ const config = {
         },
       },
     },
+
     plugins: {
       legend: {
         position: "bottom",
       },
+
       title: {
         display: true,
         text: chartTitle,
       },
+
       tooltip: {
         position: "average",
         yAlign: "bottom",
@@ -206,6 +210,7 @@ const config = {
         boxPadding: 2,
         // Workaround because can't hide multiKeyBackground
         usePointStyle: true,
+
         callbacks: {
           labelPointStyle: () => {
             return {
@@ -219,6 +224,7 @@ const config = {
             if (label) {
               label += ": ";
             }
+
             if (context.parsed.y !== null) {
               label += new Intl.NumberFormat("en-GB", {
                 style: "currency",

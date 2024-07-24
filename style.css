@@ -137,12 +137,13 @@ section {
 }
 
 .form__fields > div:has(#inflation-check) .form-input {
-  height: 1.2rem;
-  width: 1.2rem;
+  height: 1.4rem;
+  width: 1.4rem;
 }
 
 .form__fields > div:has(#inflation-check) > div label {
   color: inherit;
+  font-size: inherit;
   font-weight: inherit;
 }
 
