@@ -3,10 +3,13 @@
   --secondary: #7a9c59;
   --font: #777;
   --gray: #f1f1f1;
-  --gray-medium: hsl(from var(--gray) h s calc(l - 10));
-  --gray-dark: hsl(from var(--gray) h s calc(l - 30));
+  /* --gray-medium: hsl(from var(--gray) h s calc(l - 10)); */
+  --gray-medium: #d9d9d9;
+  /* --gray-dark: hsl(from var(--gray) h s calc(l - 30)); */
+  --gray-dark: #a6a6a6;
   --red: #b20000;
-  --red-light: hsl(from var(--red) h s calc(l + 60));
+  /* --red-light: hsl(from var(--red) h s calc(l + 60)); */
+  --red-light: #ffe5e5;
 
   --trans: 0.3s ease;
 }
