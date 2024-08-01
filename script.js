@@ -3,6 +3,8 @@
 const chartEl = document.querySelector("#chart");
 const formEl = document.querySelector("form");
 const formInputs = document.querySelectorAll(".form-container input");
+const showButtons = document.querySelectorAll(".dialog-show");
+const closeButtons = document.querySelectorAll("dialog button");
 const incomeDisplay = document.querySelector(".form__income .form-value");
 const depositDisplay = document.querySelector(".form__deposit .form-value");
 const inputReturn = document.querySelector(".form__fields #return-input");
@@ -23,9 +25,9 @@ const colors = {
 };
 
 ///////////////////////////////////////
-// Functions
+// #region Functions
 
-// Validate inputs
+// #region Validate inputs
 
 const validateInputs = function () {
   const inputsNotInFocus = Array.from(formInputs).filter(
@@ -47,7 +49,7 @@ const validateInputs = function () {
   }
 };
 
-// Calculate income
+// #region Calculate income
 
 let returnPercent, depositValue, incomeValue;
 
@@ -64,7 +66,7 @@ const calcIncome = function () {
   });
 };
 
-// Create dataset
+// #region Create dataset
 
 let years;
 
@@ -88,17 +90,17 @@ const createDataset = function (arr) {
   }
 };
 
-// Create labels
+// #region Create labels
 
 let labels = [];
 
 const createLabels = function (arr) {
-  for (let i = 0; i < years - 1; i++) {
-    arr.push(`${i + 2} Years`);
+  for (let i = 2; i <= years; i++) {
+    arr.push(`${i} Years`);
   }
 };
 
-// Update dataset
+// #region Update dataset
 
 const updateDataset = function (arr, starterValue) {
   arr.length = 1;
@@ -107,7 +109,7 @@ const updateDataset = function (arr, starterValue) {
   createDataset(arr);
 };
 
-// Update labels
+// #region Update labels
 
 const updateLabels = function (arr) {
   arr.length = 2;
@@ -117,7 +119,7 @@ const updateLabels = function (arr) {
   createLabels(arr);
 };
 
-// Update chart
+// #region Update chart
 
 const updateChart = function () {
   if (validateInputs() === false) return;
@@ -131,7 +133,7 @@ const updateChart = function () {
 };
 
 ///////////////////////////////////////
-// Chart data
+// #region Chart data
 
 let balance = [];
 let profit = [];
@@ -155,7 +157,7 @@ const data = {
 };
 
 ///////////////////////////////////////
-// Chart config
+// #region Chart config
 
 const chartTitle = `Based on previous years' avg. performance of ${
   inputReturn.value
@@ -180,6 +182,10 @@ const config = {
           maxRotation: 30,
         },
       },
+    },
+
+    animation: {
+      duration: 500,
     },
 
     plugins: {
@@ -240,7 +246,7 @@ const config = {
 };
 
 ///////////////////////////////////////
-// Init
+// #region Init
 
 const chart = new Chart(chartEl, config);
 
@@ -252,9 +258,9 @@ createDataset(profit);
 updateChart();
 
 ///////////////////////////////////////
-// Form events
+// #region Form events
 
-inputReturn.addEventListener("input", function () {
+inputReturn.addEventListener("input", () => {
   calcIncome();
   updateChart();
 });
@@ -267,9 +273,21 @@ checkInflation.addEventListener("change", updateChart);
 
 inputDeposit.addEventListener("change", updateChart);
 
-inputDeposit.addEventListener("input", function () {
+inputDeposit.addEventListener("input", () => {
   calcIncome();
 
   // Doesn't work on iOS
   // navigator.vibrate(20);
 });
+
+showButtons.forEach((btn) =>
+  btn.addEventListener("click", (e) => {
+    e.target.nextElementSibling.showModal();
+  })
+);
+
+closeButtons.forEach((btn) =>
+  btn.addEventListener("click", (e) => {
+    e.target.nextElementSibling.close();
+  })
+);

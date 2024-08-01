@@ -11,6 +11,10 @@
     />
     <link rel="stylesheet" href="style.css" />
 
+    <script
+      src="https://kit.fontawesome.com/86d1437a90.js"
+      crossorigin="anonymous"
+    ></script>
     <script defer src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script defer src="script.js"></script>
   </head>
@@ -28,6 +32,17 @@
             <span>Monthly income:</span>
             <span class="form-value">0</span>
             <span>GBP</span>
+
+            <i class="fa-solid fa-circle-info dialog-show"></i>
+
+            <dialog>
+              <p>
+                In case you decide to withdraw your monthly profit, instead of
+                reinvesting it.
+              </p>
+
+              <button class="button primary" autofocus>Ok</button>
+            </dialog>
           </div>
 
           <div class="form-row form__fields">
@@ -65,6 +80,14 @@
 
             <div>
               <label for="protect-input">Profit protection</label>
+
+              <i class="fa-solid fa-circle-info dialog-show"></i>
+
+              <dialog>
+                <p>The amount of your capital that we keep invested.</p>
+                <button class="button primary" autofocus>Ok</button>
+              </dialog>
+
               <div class="input-wrapper percent-sign">
                 <input
                   type="number"

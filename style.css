@@ -25,6 +25,7 @@ h2 {
 }
 
 label {
+  display: inline;
   margin: 0;
 }
 
@@ -54,6 +55,15 @@ input:disabled {
   opacity: 0.5;
 }
 
+dialog {
+  max-width: 24rem;
+}
+
+dialog .button {
+  float: right;
+  margin: 1rem 0 0;
+}
+
 section {
   display: flex;
   flex-wrap: wrap;
@@ -79,6 +89,12 @@ section {
   gap: 2rem;
   justify-content: center;
   width: 22vw;
+}
+
+.form-container i {
+  color: var(--primary);
+  cursor: pointer;
+  margin-left: 0.4rem;
 }
 
 .form-container .form-value {
